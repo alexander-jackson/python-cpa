@@ -16,4 +16,6 @@ def process_path(path: str):
 
     activities = contents["activities"]
     graph = Graph(activities)
+
     graph.forward_pass()
+    graph.backward_pass()

@@ -29,6 +29,7 @@ class Graph(object):
         for k in keys:
             for d in activities[k]["dependencies"]:
                 self.nodes[k].add_dependency(self.nodes[d])
+                self.nodes[d].add_successor(self.nodes[k])
 
     def forward_pass(self):
         completed = []
@@ -42,8 +43,23 @@ class Graph(object):
             ]
 
             for p in possible:
-                p.forward_pass()
+                p.forward_pass(0)
                 completed.append(p)
 
-        for n in self.nodes.values():
-            print(n.name, n.earliest_start, n.earliest_finish)
+    def backward_pass(self):
+        completed = []
+
+        leaves = [n for n in self.nodes.values() if not n.successors]
+        highest_early_finish = max([l.earliest_finish for l in leaves])
+
+        while len(completed) != len(self.nodes):
+            possible = [
+                n for n in self.nodes.values() if
+                all(d in completed for d in n.successors)
+                and
+                n not in completed
+            ]
+
+            for p in possible:
+                p.backward_pass(highest_early_finish)
+                completed.append(p)
