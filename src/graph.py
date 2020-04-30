@@ -1,5 +1,7 @@
 import pandas as pd
 
+import subprocess
+
 from node import Node
 
 class Graph(object):
@@ -74,6 +76,15 @@ class Graph(object):
 
     def display_calculated_values(self):
         data = [n.to_list() for n in self.nodes.values()]
-        columns = ["name", "es", "ef", "ls", "lf", "tf", "ff"]
+        terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])
+
+        if terminal_width >= 100:
+            columns = ["name",
+                       "earliest start", "earliest finish",
+                       "latest start", "latest finish",
+                       "total float", "free float"]
+        else:
+            columns = ["name", "es", "ef", "ls", "lf", "tf", "ff"]
+
         frame = pd.DataFrame(data, columns=columns)
         print(frame)
