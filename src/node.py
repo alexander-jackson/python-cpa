@@ -61,3 +61,11 @@ class Node(object):
             self.latest_finish = lowest.latest_start
 
         self.latest_start = self.latest_finish - self.duration
+
+    def calculate_float(self, default):
+        self.total_float = self.latest_finish - self.earliest_finish
+
+        if not self.successors:
+            self.free_float = default - self.earliest_finish
+        else:
+            self.free_float = min([s.earliest_start for s in self.successors]) - self.earliest_finish

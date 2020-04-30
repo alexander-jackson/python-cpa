@@ -63,3 +63,10 @@ class Graph(object):
             for p in possible:
                 p.backward_pass(highest_early_finish)
                 completed.append(p)
+
+    def calculate_floats(self):
+        leaves = [n for n in self.nodes.values() if not n.successors]
+        highest_early_finish = max([l.earliest_finish for l in leaves])
+
+        for n in self.nodes.values():
+            n.calculate_float(highest_early_finish)
