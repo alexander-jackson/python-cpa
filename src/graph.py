@@ -1,40 +1,44 @@
-import pandas as pd
-
 import subprocess
+from typing import Dict
+
+import pandas as pd
 
 from node import Node
 
-class Graph(object):
+class Graph():
 
     """A graph that we want to perform CPA on. """
 
-    def __init__(self, activities):
+    def __init__(self, activities: Dict):
         """Initialises the Graph object
 
         Args:
-            activities: TODO
+            activities: JSON data in the format shown in `activities.json`
+            describing the names, durations and dependencies for the problem
 
         """
         self.nodes = {}
         self.generate_graph(activities)
 
-    def generate_graph(self, activities):
-        """Generates the nodes of the graph
-        Returns: TODO
+    def generate_graph(self, activities: Dict):
+        """Generates the nodes of the graph.
 
         """
         keys = list(activities.keys())
 
-        for k in keys:
-            node = Node(k, activities[k]["duration"])
-            self.nodes[k] = node
+        for key in keys:
+            node = Node(key, activities[key]["duration"])
+            self.nodes[key] = node
 
-        for k in keys:
-            for d in activities[k]["dependencies"]:
-                self.nodes[k].add_dependency(self.nodes[d])
-                self.nodes[d].add_successor(self.nodes[k])
+        for key in keys:
+            for dependency in activities[key]["dependencies"]:
+                self.nodes[key].add_dependency(self.nodes[dependency])
+                self.nodes[dependency].add_successor(self.nodes[key])
 
     def forward_pass(self):
+        """Calculates the forward pass for the graph.
+
+        """
         completed = []
 
         while len(completed) != len(self.nodes):
@@ -45,11 +49,15 @@ class Graph(object):
                 n not in completed
             ]
 
-            for p in possible:
-                p.forward_pass(0)
-                completed.append(p)
+            for node in possible:
+                node.forward_pass(0)
+                completed.append(node)
 
     def backward_pass(self):
+        """Calculates the backward pass for the graph after a forward pass has
+        been complete.
+
+        """
         completed = []
 
         leaves = [n for n in self.nodes.values() if not n.successors]
@@ -63,18 +71,26 @@ class Graph(object):
                 n not in completed
             ]
 
-            for p in possible:
-                p.backward_pass(highest_early_finish)
-                completed.append(p)
+            for node in possible:
+                node.backward_pass(highest_early_finish)
+                completed.append(node)
 
     def calculate_floats(self):
+        """Calculates the free and total floats for the graph after a forward
+        and backward pass.
+
+        """
         leaves = [n for n in self.nodes.values() if not n.successors]
         highest_early_finish = max(l.earliest_finish for l in leaves)
 
-        for n in self.nodes.values():
-            n.calculate_float(highest_early_finish)
+        for node in self.nodes.values():
+            node.calculate_float(highest_early_finish)
 
     def display_calculated_values(self):
+        """Displays a formatted table with the different values calculated
+        after the algorithm has finished.
+
+        """
         data = [n.to_list() for n in self.nodes.values()]
         terminal_width = int(subprocess.check_output(['stty', 'size']).split()[1])
 

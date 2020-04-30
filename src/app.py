@@ -8,8 +8,6 @@ def process_path(path: str):
     Args:
         path: The filepath to perform CPA on
 
-    Returns: TODO
-
     """
     with open(path, "r") as f:
         contents = json.load(f)
