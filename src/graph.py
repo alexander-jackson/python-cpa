@@ -1,3 +1,5 @@
+import pandas as pd
+
 from node import Node
 
 class Graph(object):
@@ -20,7 +22,6 @@ class Graph(object):
 
         """
         keys = list(activities.keys())
-        print("keys: {}".format(keys))
 
         for k in keys:
             node = Node(k, activities[k]["duration"])
@@ -70,3 +71,9 @@ class Graph(object):
 
         for n in self.nodes.values():
             n.calculate_float(highest_early_finish)
+
+    def display_calculated_values(self):
+        data = [n.to_list() for n in self.nodes.values()]
+        columns = ["name", "es", "ef", "ls", "lf", "tf", "ff"]
+        frame = pd.DataFrame(data, columns=columns)
+        print(frame)

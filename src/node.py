@@ -65,3 +65,14 @@ class Node(object):
             self.free_float = default - self.earliest_finish
         else:
             self.free_float = min(s.earliest_start for s in self.successors) - self.earliest_finish
+
+    def to_list(self):
+        return [
+            self.name,
+            self.earliest_start,
+            self.earliest_finish,
+            self.latest_start,
+            self.latest_finish,
+            self.total_float,
+            self.free_float
+        ]
