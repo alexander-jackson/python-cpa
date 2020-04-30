@@ -1,5 +1,5 @@
 import subprocess
-from typing import Dict
+from typing import Dict, List
 
 import pandas as pd
 
@@ -86,6 +86,21 @@ class Graph():
 
         for node in self.nodes.values():
             node.calculate_float(highest_early_finish)
+
+    def calculate_critical_path(self) -> List[str]:
+        """Calculates the critical path for the network assuming it is unique
+        Returns: A list of activities that form the critical path
+
+        """
+        critical_path = []
+        successors = [n for n in self.nodes.values() if not n.dependencies]
+
+        while successors:
+            minima = next(n for n in successors if n.total_float == 0)
+            critical_path.append(minima.name)
+            successors = minima.successors
+
+        return critical_path
 
     def display_calculated_values(self):
         """Displays a formatted table with the different values calculated

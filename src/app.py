@@ -18,3 +18,6 @@ def process_path(path: str):
     graph.backward_pass()
     graph.calculate_floats()
     graph.display_calculated_values()
+
+    critical_path = graph.calculate_critical_path()
+    print("Critical path: {}".format(critical_path))
