@@ -31,9 +31,10 @@ class Graph():
             self.nodes[key] = node
 
         for key in keys:
-            for dependency in activities[key]["dependencies"]:
-                self.nodes[key].add_dependency(self.nodes[dependency])
-                self.nodes[dependency].add_successor(self.nodes[key])
+            dependencies = activities[key]["dependencies"]
+
+            for dependency in dependencies:
+                self.nodes[key].add_link(self.nodes[dependency])
 
     def forward_pass(self):
         """Calculates the forward pass for the graph.

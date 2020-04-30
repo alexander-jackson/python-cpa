@@ -17,6 +17,17 @@ class Node():
         self.dependencies: List['Node'] = []
         self.successors: List['Node'] = []
 
+    def add_link(self, node: 'Node'):
+        """Adds a link between this node and the other node by making this node
+        dependent on the other and this one the successor of other.
+
+        Args:
+            node: The node to link
+
+        """
+        self.add_dependency(node)
+        node.add_successor(self)
+
     def add_dependency(self, node: 'Node'):
         """Adds a dependency to another node
 
