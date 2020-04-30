@@ -50,7 +50,7 @@ class Graph(object):
         completed = []
 
         leaves = [n for n in self.nodes.values() if not n.successors]
-        highest_early_finish = max([l.earliest_finish for l in leaves])
+        highest_early_finish = max(l.earliest_finish for l in leaves)
 
         while len(completed) != len(self.nodes):
             possible = [
@@ -66,7 +66,7 @@ class Graph(object):
 
     def calculate_floats(self):
         leaves = [n for n in self.nodes.values() if not n.successors]
-        highest_early_finish = max([l.earliest_finish for l in leaves])
+        highest_early_finish = max(l.earliest_finish for l in leaves)
 
         for n in self.nodes.values():
             n.calculate_float(highest_early_finish)

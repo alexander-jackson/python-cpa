@@ -46,9 +46,7 @@ class Node(object):
         self.earliest_start = default
 
         if self.dependencies:
-            key = lambda n: n.earliest_finish
-            lowest = max(self.dependencies, key=key)
-            self.earliest_start = lowest.earliest_finish
+            self.earliest_start = max(n.earliest_finish for n in self.dependencies)
 
         self.earliest_finish = self.earliest_start + self.duration
 
@@ -56,9 +54,7 @@ class Node(object):
         self.latest_finish = default
 
         if self.successors:
-            key = lambda n: n.latest_start
-            lowest = max(self.successors, key=key)
-            self.latest_finish = lowest.latest_start
+            self.latest_finish = min(n.latest_start for n in self.successors)
 
         self.latest_start = self.latest_finish - self.duration
 
@@ -68,4 +64,4 @@ class Node(object):
         if not self.successors:
             self.free_float = default - self.earliest_finish
         else:
-            self.free_float = min([s.earliest_start for s in self.successors]) - self.earliest_finish
+            self.free_float = min(s.earliest_start for s in self.successors) - self.earliest_finish
