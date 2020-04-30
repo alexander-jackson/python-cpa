@@ -10,9 +10,8 @@ def process_path(path: str):
 
     """
     with open(path, "r") as f:
-        contents = json.load(f)
+        activities = json.load(f)
 
-    activities = contents["activities"]
     graph = Graph(activities)
 
     graph.forward_pass()

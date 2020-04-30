@@ -8,31 +8,29 @@ Assume `activities.json` contains the following:
 
 ```json
 {
-	"activities": {
-		"a" : {
-			"duration": 6,
-			"dependencies": []
-		},
-		"b" : {
-			"duration": 3,
-			"dependencies": []
-		},
-		"c" : {
-			"duration": 4,
-			"dependencies": ["b"]
-		},
-		"d" : {
-			"duration": 5,
-			"dependencies": ["b"]
-		},
-		"e" : {
-			"duration": 4,
-			"dependencies": ["a", "c"]
-		},
-		"f" : {
-			"duration": 5,
-			"dependencies": ["c", "d"]
-		}
+	"a" : {
+		"duration": 6,
+		"dependencies": []
+	},
+	"b" : {
+		"duration": 3,
+		"dependencies": []
+	},
+	"c" : {
+		"duration": 4,
+		"dependencies": ["b"]
+	},
+	"d" : {
+		"duration": 5,
+		"dependencies": ["b"]
+	},
+	"e" : {
+		"duration": 4,
+		"dependencies": ["a", "c"]
+	},
+	"f" : {
+		"duration": 5,
+		"dependencies": ["c", "d"]
 	}
 }
 ```
